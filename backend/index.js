@@ -6,8 +6,11 @@ const io = require('socket.io')(http, {
 	}
 })
 
+// index of player whose turn it is (per room)
 const turn = new Map()
+// host who created the room
 const host = new Map()
+// stores id and name of players per room
 const players = new Map()
 
 // use index.html for debug
@@ -49,22 +52,20 @@ io.on('connection', (socket) => {
 	})
 
 	socket.on('change-round', () => { changeRound(socket.roomName) })
-
-	console.log(socket.id);
 })
 
 function changeRound(roomName) {
-	console.log(roomName)
 	var nxtTurn = turn.get(roomName) + 1
 	const players = [...io.sockets.adapter.rooms.get(roomName)]
+	// out of bound index
 	if (nxtTurn >= players.length) {
 		io.to(roomName).emit('game-over')
 		return
 	}
 	var turnId = players[nxtTurn]
 	turn.set(roomName, nxtTurn)
+	// send id of next player
 	io.to(roomName).emit('change-turn', turnId)
-	console.log(turnId)
 }
 
 http.listen(5000, () => {

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Document</title>
+	</head>
+	<body>
+		hello world
+		<input type="text" name="" id="nm">
+		<button onclick="join()">join</button>
+		<button onclick="start()">start</button>
+		<button onclick="next()">next</button>
+		<p id='l'></p>
+		<script src="socket.io/socket.io.js"></script>
+		<script>
+			const socket = io("http://localhost:5000");
+			document.getElementById('l').innerHTML = socket.name;
+			socket.on('game-over', () => { console.log('over'); })
+			socket.on('started', () => { console.log('started'); })
+			function join() {
+				console.log(document.getElementById('nm').value);
+				socket.emit('join-room', { name: document.getElementById('nm').value, roomName: 'world' });
+			}
+			function start() {
+				socket.emit('start-game');
+			}
+			function next() {
+				socket.emit('change-round');
+			}
+		</script>
+	</body>
+</html>

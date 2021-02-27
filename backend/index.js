@@ -10,6 +10,11 @@ const turn = new Map()
 const host = new Map()
 const players = new Map()
 
+// use index.html for debug
+app.get('/', (req, res) => {
+	res.sendFile(__dirname + '/index.html');
+})
+
 io.on('connection', (socket) => {
 
 	socket.on('join-room', ({ name, roomName }) => {

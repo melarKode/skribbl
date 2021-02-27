@@ -6,7 +6,9 @@ const io = require('socket.io')(http, {
 	}
 })
 
-turn = new Map()
+const turn = new Map()
+const host = new Map()
+const players = new Map()
 
 io.on('connection', (socket) => {
 
@@ -15,9 +17,18 @@ io.on('connection', (socket) => {
 		socket.roomName = roomName
 		socket.playerName = name
 		socket.playerScore = 0
-		if (!turn.has(roomName))
+		// if new room is created
+		if (!turn.has(roomName)) {
 			turn.set(roomName, -1)
+			host.set(roomName, socket.id)
+			players.set(roomName, [])
+		}
+		//update player list of room
+		players.set(roomName, players.get(roomName).concat(socket.id))
+		//debug stuff
 		console.log(`${ name } joined ${ roomName }`)
+		//update lobby
+		io.to(roomName).emit('update-lobby', { players: players.get(roomName) })
 	})
 
 	socket.on('incr-score', (score) => {
@@ -32,6 +43,8 @@ io.on('connection', (socket) => {
 	})
 
 	socket.on('change-round', () => { changeRound(socket.roomName) })
+
+	console.log(socket.id);
 })
 
 function changeRound(roomName) {

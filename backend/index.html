@@ -19,6 +19,7 @@
 			document.getElementById('l').innerHTML = socket.name;
 			socket.on('game-over', () => { console.log('over'); })
 			socket.on('started', () => { console.log('started'); })
+			socket.on('update-lobby', (data) => { console.log(data); })
 			function join() {
 				console.log(document.getElementById('nm').value);
 				socket.emit('join-room', { name: document.getElementById('nm').value, roomName: 'world' });

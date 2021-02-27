@@ -19,6 +19,7 @@ io.on('connection', (socket) => {
 
 	socket.on('join-room', ({ name, roomName }) => {
 		socket.join(roomName)
+		//set properties for user
 		socket.roomName = roomName
 		socket.playerName = name
 		socket.playerScore = 0
@@ -29,11 +30,11 @@ io.on('connection', (socket) => {
 			players.set(roomName, [])
 		}
 		//update player list of room
-		players.set(roomName, players.get(roomName).concat(socket.id))
+		players.set(roomName, players.get(roomName).concat({ id: socket.id, name: name }))
 		//debug stuff
 		console.log(`${ name } joined ${ roomName }`)
 		//update lobby
-		io.to(roomName).emit('update-lobby', { players: players.get(roomName) })
+		io.to(roomName).emit('update-lobby', players.get(roomName))
 	})
 
 	socket.on('incr-score', (score) => {

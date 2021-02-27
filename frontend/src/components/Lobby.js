@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import socket from "./../config/socketConfig";
 
 function Lobby(props) {
-	const [players, setPlayers] = useState([]);
 	socket.on("update-list", (data) => {
 		console.log(data);
 	});

@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import io from "socket.io-client";
-
-var socket = io.connect("http://localhost:5000");
+import socket from "./../config/socketConfig";
 
 function Lobby(props) {
 	const [players, setPlayers] = useState([]);
+	socket.on("update-list", (data) => {
+		console.log(data);
+	});
 	return (
 		<div className="container">
 			<button type="submit" className="btn btn-primary">
 				Start
 			</button>
 			Player list:
-			<hr>{console.log(socket.on("update-lobby"))}</hr>
+			<hr></hr>
 		</div>
 	);
 }

@@ -1,9 +1,7 @@
 import React from "react";
 import { withFormik, Form, Field } from "formik";
-import { Redirect } from "react-router-dom";
-import io from "socket.io-client";
-
-var socket = io.connect("http://localhost:5000");
+import { NavLink, Redirect } from "react-router-dom";
+import socket from "./../config/socketConfig";
 
 function Landing(props) {
 	const landingPageStyle = {
